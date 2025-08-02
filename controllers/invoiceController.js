@@ -1,6 +1,7 @@
+const chromium = require('chrome-aws-lambda');
+const puppeteer = require('puppeteer-core');
 const fs = require('fs');
 const path = require('path');
-const puppeteer = require('puppeteer-core');
 
 exports.generateInvoicePDF = async (req, res) => {
   const data = req.body;
@@ -54,10 +55,10 @@ exports.generateInvoicePDF = async (req, res) => {
     // ✅ Launch browser with chrome-aws-lambda
     const browser = await puppeteer.launch({
   args: chromium.args,
-  defaultViewport: chromium.defaultViewport,
-  executablePath: await chromium.executablePath || '/usr/bin/chromium-browser',
+  executablePath: await chromium.executablePath,
   headless: chromium.headless,
 });
+
 
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
