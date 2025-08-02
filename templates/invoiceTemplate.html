@@ -14,12 +14,16 @@
         width: 100%;
         border-collapse: collapse;
       }
-      td,
-      th {
-        padding: 6px;
-        vertical-align: top;
-        border: 1px solid #000;
-      }
+     td, th {
+    font-size: 10px;
+    line-height: 1.1;
+    padding: 2px 3px;
+    height: 20px;
+    overflow: hidden;
+    vertical-align: top;
+    border: 1px solid #000;
+  }
+
       .center {
         text-align: center;
         ont-size: 18px;
@@ -134,13 +138,12 @@
         </td>
       </tr>
     </table>
-    <div style="height: 450px; overflow: hidden">
+    <div style="height: 450px; overflow: hidden ; border: 1px solid #000">
       <table
         style="
           width: 100%;
           border-collapse: collapse;
           table-layout: fixed;
-          height: 100%;
         "
       >
         <thead>
@@ -273,7 +276,7 @@
     <table>
       <tr class="bg-gray">
         <td colspan="5" style="width: 66.5%">
-          <strong>GSTIN No.:</strong> {{gstin}}
+          <strong>GSTIN No.:</strong> {{mygst}}
         </td>
         <td colspan="3" style="width: 33.5%">
           <strong>Sub Total:</strong> ₹ {{subTotal}}
@@ -296,8 +299,8 @@
         >
           <strong>P & F:</strong> {{pf}}<br />
           <strong>Taxable Amount:</strong> ₹ {{subTotal}}<br />
-          <strong>Central Tax:</strong> {{cgstRate}}% = ₹ {{cgst}}<br />
-          <strong>State/UT Tax:</strong> {{sgstRate}}% = ₹ {{sgst}}<br />
+          <strong>Central Tax {{cgstRate}}% :</strong> ₹ {{cgst}}<br />
+          <strong>State/UT Tax {{sgstRate}}% :</strong> ₹ {{sgst}}<br />
           <strong>Round Off:</strong> ₹ {{roundOff}}<br />
         </td>
       </tr>

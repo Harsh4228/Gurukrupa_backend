@@ -1,5 +1,4 @@
-const chromium = require('chrome-aws-lambda');
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,7 +8,7 @@ exports.generateInvoicePDF = async (req, res) => {
   try {
     let html = fs.readFileSync(path.join(__dirname, '../templates/invoiceTemplate.html'), 'utf8');
 
-    // Replace placeholders
+    // Replace simple placeholders
     html = html.replace('{{customer}}', data.customer || '');
     html = html.replace('{{invoice}}', data.invoice || '');
     html = html.replace('{{date}}', data.invoiceDate || '');
@@ -29,14 +28,12 @@ exports.generateInvoicePDF = async (req, res) => {
     html = html.replace('{{subTotal}}', data.subTotal || '0.00');
     html = html.replace('{{cgst}}', data.cgst || '0.00');
     html = html.replace('{{sgst}}', data.sgst || '0.00');
-    html = html.replace('{{cgstRate}}', data.cgstRate || '0.00');
-    html = html.replace('{{sgstRate}}', data.sgstRate || '0.00');
-    html = html.replace('{{mygst}}', '3456789098765');
     html = html.replace('{{roundOff}}', data.roundOff || '0.00');
     html = html.replace('{{totalGst}}', (parseFloat(data.cgst || 0) + parseFloat(data.sgst || 0)).toFixed(2));
     html = html.replace('{{grandTotal}}', data.grandTotal || '0.00');
     html = html.replace('{{note}}', data.note || '');
 
+    // Generate product rows manually
     const productRows = data.products.map((p, index) => `
       <tr>
         <td>${index + 1}</td>
@@ -52,14 +49,8 @@ exports.generateInvoicePDF = async (req, res) => {
 
     html = html.replace(/{{#each products}}([\s\S]*?){{\/each}}/, productRows);
 
-    // ✅ Launch browser with chrome-aws-lambda
-    const browser = await puppeteer.launch({
-  args: chromium.args,
-  executablePath: await chromium.executablePath,
-  headless: chromium.headless,
-});
-
-
+    // Launch Puppeteer and generate PDF
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
 
