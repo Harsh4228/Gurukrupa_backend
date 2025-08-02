@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const chromium = require('chrome-aws-lambda');
 const puppeteer = require('puppeteer-core');
 
 exports.generateInvoicePDF = async (req, res) => {
